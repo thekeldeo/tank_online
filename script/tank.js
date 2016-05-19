@@ -96,15 +96,23 @@ class Tank{
         }
     }
 
+
     tankDrinkStar(){
         var s1 = {x: this.x+ this.speedX, y: this.y +this.speedY, width : 32, height: 32}; //tank
-        var s2 = {x: star.x, y: star.y, width: 32, height: 32};
-
-        if (s1.x == s2.x &&
-            s1.y == s2.y) player.level ++;
+        for (var i=0; i<stars.length; i++){
+            var s2 = {x: stars[i].x, y: stars[i].y, width: 32, height: 32};
+            if (s1.x < s2.x + s2.width &&
+                s1.x + s1.width > s2.x &&
+                s1.y < s2.y + s2.height &&
+                s1.height + s1.y > s2.y)  {
+                if(this.level<=2) {
+                    player.level++;
+                    stars.splice(i,1);
+                }
+            }
+        }
 
     }
-
     draw(context){
         context.drawImage(this.sprite, this.x, this.y);
         for(var i=0; i< this.bullets.length; i++){

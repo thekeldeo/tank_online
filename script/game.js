@@ -22,8 +22,7 @@ function gameStart() {
     //phan biet player va Tank nhe
     //Tank la ban thiet ke
     //con player moi la xe tang that su
-    player = new Tank(20, 20);
-    star = new Star(40,50);
+    player = new Tank(120, 20);
 }
 
 function gameUpdate() {
@@ -78,6 +77,8 @@ window.onkeyup = function (e) {
 var wallBricks = new Array();
 var wallSteels = new Array();
 var river = new Array();
+var stars = new Array();
+
 
 var mapWidth = 34;
 var mapHeight = 34;
@@ -98,6 +99,12 @@ for(var i =0; i<mapHeight; i++){
         }
     }
 }
+
+var star1 = new Star(40,50);
+stars.push(star1);
+var star2 = new Star(40,250);
+stars.push(star2);
+
 function gameDrawer(context) {
     context.fillStyle = "black";
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -111,5 +118,7 @@ function gameDrawer(context) {
     for(var i =0; i< river.length; i++){
         river[i].draw(context);
     }
-    star.draw(context);
+    for(var i=0; i<stars.length; i++){
+        stars[i].draw(context);
+    }
 }
