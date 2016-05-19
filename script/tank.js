@@ -78,6 +78,8 @@ class Tank{
             for(var j = 0; j< wallBricks.length; j++){
                 var s2 = {x: wallBricks[j].x, y: wallBricks[j].y, width : 16, height: 16} //s2 :brick
                 if (this.compare(s1,s2)) {
+                    soundEfx.src = 'sound/bullet_shot.ogg';
+                    soundEfx.play();
                     this.bullets.pop();
                     wallBricks.splice(j,1);
                     break;
@@ -89,6 +91,8 @@ class Tank{
             for(var j = 0; j< wallSteels.length; j++){
                 var s2 = {x: wallSteels[j].x, y: wallSteels[j].y, width : 16, height: 16} //s2 :brick
                 if (this.compare(s1,s2)) {
+                    soundEfx.src = 'sound/bullet_hit_1.ogg';
+                    soundEfx.play();
                     this.bullets.splice(i,1);
                     break;
                 }
@@ -106,6 +110,8 @@ class Tank{
                 s1.y < s2.y + s2.height &&
                 s1.height + s1.y > s2.y)  {
                 if(this.level<=2) {
+                    soundEfx.src = 'sound/powerup_pick.ogg';
+                    soundEfx.play();
                     player.level++;
                     stars.splice(i,1);
                 }
@@ -161,8 +167,10 @@ class Tank{
 
 
     shot (){
-            var bullet = new Bullet(this.x+12, this.y+12, this.direction, this.level);
+        var bullet = new Bullet(this.x+12, this.y+12, this.direction, this.level);
             if (this.bullets.length < this.level){
+                soundEfx.src = 'sound/bullet_hit_2.ogg';
+                soundEfx.play();
                 this.bullets.push(bullet);
             }
     }

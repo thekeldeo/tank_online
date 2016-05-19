@@ -2,8 +2,10 @@
  * Created by hungtran on 5/16/16.
  */
 var context;
+var soundEfx; // Sound Efx
 
 window.onload = function () {
+    soundEfx = document.getElementById("soundEfx");
     var canvas = document.createElement("canvas");
     document.body.appendChild(canvas);
     context = canvas.getContext("2d");
@@ -18,7 +20,7 @@ var gameLoop = function () {
     gameDrawer(context);
 };
 function gameStart() {
-
+    soundEfx.play();
     //phan biet player va Tank nhe
     //Tank la ban thiet ke
     //con player moi la xe tang that su
