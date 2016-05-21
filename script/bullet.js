@@ -7,7 +7,6 @@ class Bullet{
         this.y = y;
         this.speedX = 0;
         this.speedY = 0;
-        this.direction = 0;
         this.spriteUp = new Image();
         this.spriteUp.src = "images/bullet_up.png";
         this.spriteDown = new Image();

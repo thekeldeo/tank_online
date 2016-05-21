@@ -3,7 +3,7 @@
  */
 var context;
 var soundEfx; // Sound Efx
-
+var bots;
 window.onload = function () {
     soundEfx = document.getElementById("soundEfx");
     var canvas = document.createElement("canvas");
@@ -21,15 +21,21 @@ var gameLoop = function () {
 };
 function gameStart() {
     soundEfx.play();
-    //phan biet player va Tank nhe
-    //Tank la ban thiet ke
-    //con player moi la xe tang that su
-    player = new Tank(120, 20);
+    player = new Tank(120, 400);
 }
 
 function gameUpdate() {
     player.update();
+    for(var i =0; i< river.length; i++){
+        river[i].ani.update();
+    }
     player.bulletKissBrick();
+}
+function creatBot() {
+
+    var n=20, m =20;
+    var bot = new basic_tank(n*2,m*2);
+    bots.push(bot);
 }
 
 window.onkeydown = function (e) {
@@ -82,16 +88,16 @@ var river = new Array();
 var stars = new Array();
 
 
-var mapWidth = 34;
-var mapHeight = 34;
+var mapWidth = 28;
+var mapHeight = 28;
 
 for(var i =0; i<mapHeight; i++){
     for(var j=0; j<mapHeight; j++){
-        if (map[i * mapWidth + j] === 1){
+        if (map[i * mapWidth + j] === 2){
             var wall= new WallBrick(j,i);
             wallBricks.push(wall);
         }
-        if (map[i * mapWidth + j] === 2){
+        if (map[i * mapWidth + j] === 1){
             var wall = new WallSteel(j,i);
             wallSteels.push(wall);
         }
@@ -110,15 +116,15 @@ stars.push(star2);
 function gameDrawer(context) {
     context.fillStyle = "black";
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    for(var i =0; i< river.length; i++){
+        river[i].ani.draw(context);
+    }
     player.draw(context);
     for(var i =0; i< wallBricks.length; i++){
         wallBricks[i].draw(context);
     }
     for(var i =0; i< wallSteels.length; i++){
         wallSteels[i].draw(context);
-    }
-    for(var i =0; i< river.length; i++){
-        river[i].draw(context);
     }
     for(var i=0; i<stars.length; i++){
         stars[i].draw(context);

@@ -1,4 +1,4 @@
-
+    
 class Tank{
     constructor(x, y){
         this.x = x;
@@ -34,7 +34,7 @@ class Tank{
 
     lvlUp(){
         if (this.level === 2){
-            this.spriteUp.src = 'images/tank_player1_up_c0_t1_s1.png';
+            this.spriteUp.src = 'images/tank_player1_up_c0_t1_s2.png';
             this.spriteDown.src = 'images/tank_player1_down_c0_t1_s2.png';
             this.spriteLeft.src = 'images/tank_player1_left_c0_t1_s2.png';
             this.spriteRight.src = 'images/tank_player1_right_c0_t1_s2.png';
@@ -78,8 +78,10 @@ class Tank{
             for(var j = 0; j< wallBricks.length; j++){
                 var s2 = {x: wallBricks[j].x, y: wallBricks[j].y, width : 16, height: 16} //s2 :brick
                 if (this.compare(s1,s2)) {
-                    soundEfx.src = 'sound/bullet_shot.ogg';
-                    soundEfx.play();
+                    if(soundEfx.paused){
+                        soundEfx.src = 'sound/bullet_shot.ogg';
+                        soundEfx.play();
+                    }
                     this.bullets.pop();
                     wallBricks.splice(j,1);
                     break;
@@ -91,8 +93,10 @@ class Tank{
             for(var j = 0; j< wallSteels.length; j++){
                 var s2 = {x: wallSteels[j].x, y: wallSteels[j].y, width : 16, height: 16} //s2 :brick
                 if (this.compare(s1,s2)) {
-                    soundEfx.src = 'sound/bullet_hit_1.ogg';
-                    soundEfx.play();
+                    if(soundEfx.paused){
+                        soundEfx.src = 'sound/bullet_hit_1.ogg';
+                        soundEfx.play();
+                    }
                     this.bullets.splice(i,1);
                     break;
                 }
@@ -102,16 +106,15 @@ class Tank{
 
 
     tankDrinkStar(){
-        var s1 = {x: this.x+ this.speedX, y: this.y +this.speedY, width : 32, height: 32}; //tank
+        var s1 = {x: this.x+ this.speedX, y: this.y +this.speedY, width : 30, height: 30}; //tank
         for (var i=0; i<stars.length; i++){
-            var s2 = {x: stars[i].x, y: stars[i].y, width: 32, height: 32};
-            if (s1.x < s2.x + s2.width &&
-                s1.x + s1.width > s2.x &&
-                s1.y < s2.y + s2.height &&
-                s1.height + s1.y > s2.y)  {
+            var s2 = {x: stars[i].x, y: stars[i].y, width: 26, height: 26};
+            if (this.compare(s1,s2))  {
                 if(this.level<=2) {
-                    soundEfx.src = 'sound/powerup_pick.ogg';
-                    soundEfx.play();
+                    if(soundEfx.paused){
+                        soundEfx.src = 'sound/powerup_pick.ogg';
+                        soundEfx.play();
+                    }
                     player.level++;
                     stars.splice(i,1);
                 }
@@ -132,7 +135,7 @@ class Tank{
         switch (direction){
             case 1://up
                 if(this.y >=10){
-                    this.speedY = -3;
+                    this.speedY = -4;
                     this.speedX = 0;
                 }
                 this.sprite = this.spriteUp;
@@ -140,7 +143,7 @@ class Tank{
                 break;
             case 2://down
                 if(this.y <= window.innerHeight - 10){
-                    this.speedY = 3;
+                    this.speedY = 4;
                     this.speedX = 0;
                 }
                 this.sprite = this.spriteDown;
@@ -148,7 +151,7 @@ class Tank{
                 break;
             case 3://left
                 if(this.x >= 10){
-                    this.speedX = -3;
+                    this.speedX = -4;
                     this.speedY = 0;
                 }
                 this.sprite = this.spriteLeft;
@@ -156,7 +159,7 @@ class Tank{
                 break;
             case 4://right
                 if (this.x <= window.innerWidth -10){
-                    this.speedX = 3;
+                    this.speedX = 4;
                     this.speedY = 0;
                 }
                 this.sprite = this.spriteRight;
@@ -168,11 +171,13 @@ class Tank{
 
     shot (){
         var bullet = new Bullet(this.x+12, this.y+12, this.direction, this.level);
-            if (this.bullets.length < this.level){
+        if (this.bullets.length < this.level){
+            if(soundEfx.paused){
                 soundEfx.src = 'sound/bullet_hit_2.ogg';
                 soundEfx.play();
-                this.bullets.push(bullet);
             }
+            this.bullets.push(bullet);
+        }
     }
 
 
