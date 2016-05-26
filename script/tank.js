@@ -1,6 +1,6 @@
     
 class Tank{
-    constructor(x, y){
+    constructor(x, y, id){
         this.x = x;
         this.y = y;
         this.speedX = 0;
@@ -18,15 +18,29 @@ class Tank{
         this.direction = 1;//bien luu huong di chuyen hien tai cua tank
         this.bullets = new Array() ;
         this.level = 1;
+        this.id = id;
     }
     update(){
+        switch (this.direction){
+            case 1:
+                this.sprite = this.spriteUp;
+                break;
+            case 2:
+                this.sprite = this.spriteDown;
+                break;
+            case 3:
+                this.sprite = this.spriteLeft;
+                break;
+            case 4:
+                this.sprite = this.spriteRight;
+                break;
+        }
         this.tankDrinkStar();
         this.lvlUp();
         if(this.tankKissBrick()==false){
             this.x += this.speedX;
             this.y += this.speedY;
         }
-        
         for(var i=0; i< this.bullets.length; i++){
             this.bullets[i].update();
         }
@@ -138,7 +152,6 @@ class Tank{
                     this.speedY = -4;
                     this.speedX = 0;
                 }
-                this.sprite = this.spriteUp;
                 this.direction = 1;
                 break;
             case 2://down
@@ -146,7 +159,6 @@ class Tank{
                     this.speedY = 4;
                     this.speedX = 0;
                 }
-                this.sprite = this.spriteDown;
                 this.direction = 2;
                 break;
             case 3://left
@@ -154,7 +166,6 @@ class Tank{
                     this.speedX = -4;
                     this.speedY = 0;
                 }
-                this.sprite = this.spriteLeft;
                 this.direction = 3;
                 break;
             case 4://right
@@ -162,7 +173,6 @@ class Tank{
                     this.speedX = 4;
                     this.speedY = 0;
                 }
-                this.sprite = this.spriteRight;
                 this.direction = 4;
                 break;
         }
@@ -179,6 +189,4 @@ class Tank{
             this.bullets.push(bullet);
         }
     }
-
-
 }

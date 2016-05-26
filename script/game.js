@@ -4,6 +4,8 @@
 var context;
 var soundEfx; // Sound Efx
 var bots;
+var socket;
+var enemyTanks = new Array();
 window.onload = function () {
     soundEfx = document.getElementById("soundEfx");
     var canvas = document.createElement("canvas");
@@ -12,8 +14,40 @@ window.onload = function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     gameStart();
+    initSocketClient();
     setInterval(gameLoop, 17);
 };
+
+function initSocketClient() {
+    socket = io.connect();
+    player = new Tank(120, 400,0);
+    socket.emit('player_created',{x: player.x, y:player.y});
+    socket.on('info_other_players',function (data) {
+        player.id = data.id;
+        console.log(player.id);
+        for (var i = 0; i < data.tanks.length; i++){
+            var newTank = new Tank(data.tanks[i].x,data.tanks[i].y, data.tanks[i].id);
+            enemyTanks.push(newTank);
+        }
+    });
+    socket.on('new_player_connected', function (data) {
+        var newTank = new Tank(data.x,data.y, data.id);
+        enemyTanks.push(newTank);
+    });
+
+    socket.on('enemy_update',function (data) {
+        for(var i = 0; i< enemyTanks.length; i++ ){
+            if(enemyTanks[i].id == data.id){
+                enemyTanks[i].direction = data.direction;
+                console.log(data.direction);
+                enemyTanks[i].x = data.x;
+                enemyTanks[i].y = data.y;
+                break;
+            }
+        }
+    });
+}
+
 var player;
 var gameLoop = function () {
     gameUpdate();
@@ -21,22 +55,20 @@ var gameLoop = function () {
 };
 function gameStart() {
     soundEfx.play();
-    player = new Tank(120, 400);
 }
 
 function gameUpdate() {
     player.update();
+    socket.emit('player_update',{x: player.x, y: player.y, id: player.id, direction: player.direction});
+    for(var i=0; i< enemyTanks.length; i++){
+        enemyTanks[i].update();
+    }
     for(var i =0; i< river.length; i++){
         river[i].ani.update();
     }
     player.bulletKissBrick();
 }
-function creatBot() {
 
-    var n=20, m =20;
-    var bot = new basic_tank(n*2,m*2);
-    bots.push(bot);
-}
 
 window.onkeydown = function (e) {
     switch (e.keyCode){
@@ -118,6 +150,9 @@ function gameDrawer(context) {
     context.fillRect(0, 0, window.innerWidth, window.innerHeight);
     for(var i =0; i< river.length; i++){
         river[i].ani.draw(context);
+    }
+    for(var i=0; i< enemyTanks  .length; i++){
+        enemyTanks[i].draw(context);
     }
     player.draw(context);
     for(var i =0; i< wallBricks.length; i++){
